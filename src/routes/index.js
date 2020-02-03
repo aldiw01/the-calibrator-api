@@ -4,11 +4,12 @@ const exjwt = require('express-jwt')
 
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
-  secret: process.env.APP_TOKEN_ADMIN_SECRET
+  secret: process.env.APP_TOKEN_SECRET
 });
 
+const accounts = require('./accounts')
 const cal_certificates = require('./cal_certificates')
-const cal_manuals = require('./cal_manuals')
+const cal_specifications = require('./cal_specifications')
 const cal_requests = require('./cal_requests')
 const cal_results = require('./cal_results')
 const cal_steps = require('./cal_steps')
@@ -25,8 +26,9 @@ const uploads = require('./uploads')
 /////////////////////////////////////////////////////////////////////////////////////////////
 // API Routes
 
+router.use('/accounts', accounts)
 router.use('/cal_certificates', cal_certificates)
-router.use('/cal_manuals', cal_manuals)
+router.use('/cal_specifications', cal_specifications)
 router.use('/cal_requests', cal_requests)
 router.use('/cal_results', cal_results)
 router.use('/cal_steps', cal_steps)

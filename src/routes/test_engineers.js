@@ -7,7 +7,7 @@ const crypto = require("crypto")
 
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
-  secret: process.env.APP_TOKEN_ADMIN_SECRET
+  secret: process.env.APP_TOKEN_SECRET
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////

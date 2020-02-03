@@ -7,23 +7,23 @@ const exjwt = require('express-jwt')
 
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
-  secret: process.env.APP_TOKEN_ADMIN_SECRET
+  secret: process.env.APP_TOKEN_SECRET
 });
 
 const storageDevices = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, __dirname + '/uploads/devices/')
+    cb(null, 'src/uploads/devices/')
   },
   filename: function (req, file, cb) {
-    cb(null, new Date().toISOString().replace(/:/g, '-') + '_' + file.originalname)
+    cb(null, file.fieldname + '_' + new Date().valueOf() + '_' + file.originalname)
   }
 })
 
 function fileFilter(req, file, cb) {
-  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf' || file.mimetype === 'application/msword') {
     cb(null, true)
   } else {
-    cb({ message: 'Only for image (jpg/jpeg/png).' }, false)
+    cb({ message: 'Only for images or documents (jpg/jpeg/png/pdf/doc).' }, false)
   }
 };
 
@@ -34,8 +34,24 @@ router.get('/', jwtMW, (req, res) => {
   db.getDeviceAll(req.body, res)
 })
 
+router.get('/dashboard/', (req, res) => {
+  db.getDeviceDashboard(req.params, res)
+})
+
 router.get('/:id', (req, res) => {
   db.getDevice(req.params, res)
+})
+
+router.get('/owner/:id', (req, res) => {
+  db.getDeviceOwner(req.params, res)
+})
+
+router.get('/defect_status/:lab/:id', (req, res) => {
+  db.getDeviceDefectStatus(req.params, res)
+})
+
+router.get('/calibration_status/:lab', (req, res) => {
+  db.getDeviceCalibrationStatus(req.params, res)
 })
 
 router.post('/', jwtMW, (req, res) => {
@@ -45,7 +61,7 @@ router.post('/', jwtMW, (req, res) => {
       fileSize: 5 * 1024 * 1024
     },
     fileFilter: fileFilter
-  }).single('fileImage')
+  }).fields([{ name: 'manual_file', maxCount: 1 }, { name: 'spec_file', maxCount: 1 }, { name: 'documentation', maxCount: 1 }])
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.
@@ -55,15 +71,17 @@ router.post('/', jwtMW, (req, res) => {
       // An unknown error occurred when uploading.
       res.send(err)
       return
-    } else if (req.file == undefined) {
-      res.send('index', { message: 'No file selected!' })
+    } else if (req.files == undefined) {
+      res.send({ message: 'No file selected!' })
       return
     }
     // Everything went fine.
     console.log('Upload success.')
 
     // File name key used while in production and filename in development
-    req.body.documentation = req.file.filename
+    req.body.manual_file = req.files.manual_file[0].filename
+    req.body.spec_file = req.files.spec_file[0].filename
+    req.body.documentation = req.files.documentation[0].filename
 
     db.newDevice(req.body, res)
   })

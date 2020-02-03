@@ -13,7 +13,7 @@ $ git clone https://github.com/aldiw01/the-calibrator-api.git
 $ cd the-calibrator-api
 ```
 
-#### Import database safe_t.sql into mySQL server
+#### Import database telkom_calibrator.sql into mySQL server
 
 #### Install node and npm
 For windows version, you can get it here -> https://nodejs.org/en/download/ 

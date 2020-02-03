@@ -1,50 +1,50 @@
 
 const express = require('express')
 var router = express.Router()
-var db = require('../models/cal_manuals')
+var db = require('../models/cal_specifications')
 const exjwt = require('express-jwt')
 
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
-  secret: process.env.APP_TOKEN_ADMIN_SECRET
+  secret: process.env.APP_TOKEN_SECRET
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-// API Calibration Manuals => /api/cal_manuals/
+// API Calibration Specifications => /api/cal_specifications/
 
 router.get('/', jwtMW, (req, res) => {
-  db.getCalManualAll(req.body, res)
+  db.getCalSpecificationAll(req.body, res)
 })
 
 router.get('/:id', (req, res) => {
-  db.getCalManual(req.params, res)
+  db.getCalSpecification(req.params, res)
 })
 
 router.get('/devices/:id', jwtMW, (req, res) => {
-  db.getCalManualDevice(req.params, res)
+  db.getCalSpecificationDevice(req.params, res)
 })
 
 router.get('/test_items/:id', jwtMW, (req, res) => {
-  db.getCalManualTestItem(req.params, res)
+  db.getCalSpecificationTestItem(req.params, res)
 })
 
 router.post('/', jwtMW, (req, res) => {
-  db.newCalManual(req.body, res)
+  db.newCalSpecification(req.body, res)
 })
 
 router.put('/:id', jwtMW, (req, res) => {
-  db.updateCalManual(req.body, res)
+  db.updateCalSpecification(req.body, res)
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // EXTREAMLY DANGEROUS, USE THIS WISELY
 
 router.delete('/ever/:id', jwtMW, (req, res) => {
-  db.deleteCalManual(req.params, res)
+  db.deleteCalSpecification(req.params, res)
 })
 
 router.delete('/all/ever', jwtMW, (req, res) => {
-  db.deleteCalManualAll(req.params, res)
+  db.deleteCalSpecificationAll(req.params, res)
 })
 
 module.exports = router

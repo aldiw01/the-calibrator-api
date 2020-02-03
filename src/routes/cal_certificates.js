@@ -7,23 +7,23 @@ const exjwt = require('express-jwt')
 
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
-  secret: process.env.APP_TOKEN_ADMIN_SECRET
+  secret: process.env.APP_TOKEN_SECRET
 });
 
 const storageCertificates = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, __dirname + '/uploads/certificates/');
+    cb(null, 'src/uploads/cal_certificates/');
   },
   filename: function (req, file, cb) {
-    cb(null, new Date().toISOString().replace(/:/g, '-') + '_' + file.originalname);
+    cb(null, file.fieldname + '_' + new Date().valueOf() + '_' + file.originalname);
   }
 })
 
 function fileFilter(req, file, cb) {
-  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  if (file.mimetype === 'application/pdf' || file.mimetype === 'application/msword') {
     cb(null, true)
   } else {
-    cb({ message: 'Only for image (jpg/jpeg/png).' }, false)
+    cb({ message: 'Only for documents (pdf/doc).' }, false)
   }
 };
 
@@ -53,7 +53,7 @@ router.post('/', jwtMW, (req, res) => {
       fileSize: 5 * 1024 * 1024
     },
     fileFilter: fileFilter
-  }).single('fileImage')
+  }).single('certificate_file')
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       // A Multer error occurred when uploading.

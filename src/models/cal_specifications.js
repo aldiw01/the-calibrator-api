@@ -9,10 +9,10 @@ const c = new Client({
 module.exports = {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-  // CALIBRATION MANUAL MODELS
+  // CALIBRATION SPECIFICATION MODELS
 
-  getCalManualAll: function (req, res) {
-    c.query("SELECT * FROM `cal_manuals`", null, { metadata: true, useArray: true }, function (err, rows) {
+  getCalSpecificationAll: function (req, res) {
+    c.query("SELECT * FROM `cal_specifications`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -38,8 +38,8 @@ module.exports = {
     });
     c.end();
   },
-  getCalManual: function (req, res) {
-    c.query("SELECT * FROM `cal_manuals` WHERE id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+  getCalSpecification: function (req, res) {
+    c.query("SELECT * FROM `cal_specifications` WHERE id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -65,8 +65,8 @@ module.exports = {
     });
     c.end();
   },
-  getCalManualDevice: function (req, res) {
-    c.query("SELECT * FROM `cal_manuals` WHERE device_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+  getCalSpecificationDevice: function (req, res) {
+    c.query("SELECT * FROM `cal_specifications` WHERE device_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -92,8 +92,8 @@ module.exports = {
     });
     c.end();
   },
-  getCalManualTestItem: function (req, res) {
-    c.query("SELECT * FROM `cal_manuals` WHERE test_item_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+  getCalSpecificationTestItem: function (req, res) {
+    c.query("SELECT * FROM `cal_specifications` WHERE test_item_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -119,14 +119,14 @@ module.exports = {
     });
     c.end();
   },
-  newCalManual: function (req, res) {
+  newCalSpecification: function (req, res) {
     const waktu = new Date().toISOString();
     var request = ['M' + new Date(waktu).valueOf().toString(32).toUpperCase(), req.device_id, req.test_item_id, req.ppm_output, req.floor, req.resolution];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("INSERT INTO `cal_manuals`(`id`, `device_id`, `test_item_id`, `ppm_output`, `floor`, `resolution`) VALUES (?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("INSERT INTO `cal_specifications`(`id`, `device_id`, `test_item_id`, `ppm_output`, `floor`, `resolution`) VALUES (?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -136,19 +136,19 @@ module.exports = {
       res.json({
         affectedRows: rows.info.affectedRows,
         err: null,
-        message: "Calibration Manual has registered successfully",
+        message: "Calibration Specification has registered successfully",
         success: true
       });
     });
     c.end();
   },
-  updateCalManual: function (req, res) {
+  updateCalSpecification: function (req, res) {
     var request = [req.device_id, req.test_item_id, req.ppm_output, req.floor, req.resolution, req.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("UPDATE `cal_manuals` SET `device_id`=?, `test_item_id`=?, `ppm_output`=?, `floor`=?, `resolution`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("UPDATE `cal_specifications` SET `device_id`=?, `test_item_id`=?, `ppm_output`=?, `floor`=?, `resolution`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -158,19 +158,19 @@ module.exports = {
       res.json({
         affectedRows: rows.info.affectedRows,
         err: null,
-        message: "Calibration Manual has updated successfully",
+        message: "Calibration Specification has updated successfully",
         success: true
       });
     });
     c.end();
   },
-  deleteCalManual: function (req, res) {
+  deleteCalSpecification: function (req, res) {
     var request = [req.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("DELETE FROM `cal_manuals` WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("DELETE FROM `cal_specifications` WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -183,15 +183,15 @@ module.exports = {
         res.json({
           affectedRows: rows.info.affectedRows,
           err: null,
-          message: "Calibration Manual has deleted successfully",
+          message: "Calibration Specification has deleted successfully",
           success: true
         });
       }
     });
     c.end();
   },
-  deleteCalManualAll: function (req, res) {
-    c.query("DELETE FROM `cal_manuals`", null, { metadata: true, useArray: true }, function (err, rows) {
+  deleteCalSpecificationAll: function (req, res) {
+    c.query("DELETE FROM `cal_specifications`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -203,7 +203,7 @@ module.exports = {
       } else {
         res.json({
           affectedRows: rows.info.affectedRows,
-          message: "All Calibration Manual has deleted successfully :[",
+          message: "All Calibration Specification has deleted successfully :[",
           success: true
         });
       }

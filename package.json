@@ -24,7 +24,7 @@
     "url": "https://github.com/aldiw01/the-calibrator-api/issues"
   },
   "scripts": {
-    "start": "node src/index",
-    "start-dev": "nodemon src/index"
+    "start": "node src",
+    "start-dev": "nodemon src"
   }
 }

@@ -65,6 +65,60 @@ module.exports = {
     });
     c.end();
   },
+  getCertificateDevice: function (req, res) {
+    c.query("SELECT * FROM `cal_certificates` WHERE device_id = ? ORDER BY `calibration_date` DESC", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      var data = [];
+      rows.forEach(function (items) {
+        data.push({
+          id: items[0],
+          device_id: items[1],
+          calibration_date: items[2],
+          due_date: items[3],
+          test_engineer_id: items[4],
+          certificate_file: items[5]
+        });
+      });
+      if (data.length < 1) {
+        res.status(404).send({ message: 'Data not found.' });
+      } else {
+        res.json(data);
+      }
+    });
+    c.end();
+  },
+  getCertificateEngineer: function (req, res) {
+    c.query("SELECT * FROM `cal_certificates` WHERE test_engineer_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      var data = [];
+      rows.forEach(function (items) {
+        data.push({
+          id: items[0],
+          device_id: items[1],
+          calibration_date: items[2],
+          due_date: items[3],
+          test_engineer_id: items[4],
+          certificate_file: items[5]
+        });
+      });
+      if (data.length < 1) {
+        res.status(404).send({ message: 'Data not found.' });
+      } else {
+        res.json(data);
+      }
+    });
+    c.end();
+  },
   newCertificate: function (req, res) {
     var request = [req.id, req.device_id, req.calibration_date, req.due_date, req.test_engineer_id, req.certificate_file];
     if (request.includes(undefined) || request.includes("")) {
