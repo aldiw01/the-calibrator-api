@@ -143,12 +143,12 @@ module.exports = {
   },
   updateCertificate: function (req, res) {
     const waktu = new Date().toISOString();
-    var request = [req.device_id, req.calibration_date, req.due_date, req.test_engineer_id, waktu, req.id];
+    var request = [req.device_id, req.calibration_date, req.due_date, req.test_engineer_id, req.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("UPDATE `cal_certificates` SET `device_id`=?, `calibration_date`=?, `due_date`=?, `test_engineer_id`=?, `updated`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("UPDATE `cal_certificates` SET `device_id`=?, `calibration_date`=?, `due_date`=?, `test_engineer_id`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
