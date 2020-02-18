@@ -11,9 +11,9 @@ module.exports = {
   /////////////////////////////////////////////////////////////////////////////////////////////
   // ACCOUNT MODELS
 
-  cekLogin: function (email, pass, callback) {
-    var req = [email, pass];
-    c.query("SELECT * FROM `test_engineers` WHERE `email`=? AND `password`=?", req, { metadata: true, useArray: true }, function (err, rows) {
+  cekLogin: function (id, pass, callback) {
+    var req = [id, pass];
+    c.query("SELECT * FROM `test_engineers` WHERE `id`=? AND `password`=?", req, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -27,11 +27,10 @@ module.exports = {
             id: items[0],
             name: items[1],
             lab: items[2],
-            codename: items[3],
-            email: items[5],
-            role: items[6],
-            registered: items[7],
-            updated: items[8]
+            email: items[4],
+            role: items[5],
+            registered: items[6],
+            updated: items[7]
           });
         });
       }
@@ -257,7 +256,7 @@ module.exports = {
   // CHECK REGISTERED
 
   checkUserRegistered: function (req, res) {
-    c.query("SELECT * FROM `test_engineers` WHERE `email`=? AND `id` LIKE 'U%'", [req.email], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `test_engineers` WHERE `id`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);

@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    container_name: the-calibrator-api
+    restart: always
+    build: .
+    ports:
+      - '8900:8900'
+    links:
+      - mariasql
+  mariasql:
+    container_name: mariasql
+    image: mariasql
+    ports:
+      - '3306:3306'

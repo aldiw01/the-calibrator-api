@@ -25,12 +25,11 @@ module.exports = {
           id: items[0],
           name: items[1],
           lab: items[2],
-          codename: items[3],
-          // password: items[4],
-          email: items[5],
-          role: items[6],
-          registered: items[7],
-          updated: items[8]
+          // password: items[3],
+          email: items[4],
+          role: items[5],
+          registered: items[6],
+          updated: items[7]
         });
       });
       if (data.length < 1) {
@@ -55,12 +54,11 @@ module.exports = {
           id: items[0],
           name: items[1],
           lab: items[2],
-          codename: items[3],
-          // password: items[4],
-          email: items[5],
-          role: items[6],
-          registered: items[7],
-          updated: items[8]
+          // password: items[3],
+          email: items[4],
+          role: items[5],
+          registered: items[6],
+          updated: items[7]
         });
       });
       if (data.length < 1) {
@@ -85,12 +83,11 @@ module.exports = {
           id: items[0],
           name: items[1],
           lab: items[2],
-          codename: items[3],
-          // password: items[4],
-          email: items[5],
-          role: items[6],
-          registered: items[7],
-          updated: items[8]
+          // password: items[3],
+          email: items[4],
+          role: items[5],
+          registered: items[6],
+          updated: items[7]
         });
       });
       if (data.length < 1) {
@@ -103,21 +100,12 @@ module.exports = {
   },
   newEngineer: function (req, password, res) {
     const waktu = new Date().toISOString();
-    var request = ['E' + new Date(waktu).valueOf().toString(32).toUpperCase(), req.name, req.lab, req.codename, password, req.email, waktu, waktu];
+    var request = [req.id, req.name, req.lab, password, req.email, waktu, waktu];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    // c.query("INSERT INTO `verification_token`(`email`, `token`, `status`, `created`, `updated`) VALUES (?, ?, '0', ?, ?)", [req.email, req.token, waktu, waktu], { metadata: true, useArray: true }, function (err, rows) {
-    //   if (err) {
-    //     res.status(500).send({ message: "Error 500: Internal Server Error" });
-    //     console.log(err);
-    //     return
-    //   }
-
-    //   mailService.sendVerification(req.email, req.name, req.token);
-    // });
-    c.query("INSERT INTO `test_engineers`(`id`, `name`, `lab`, `codename`, `password`, `email`, `role`, `registered`, `updated`) VALUES (?, ?, ?, ?, ?, ?, '0', ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("INSERT INTO `test_engineers`(`id`, `name`, `lab`, `password`, `email`, `role`, `registered`, `updated`) VALUES (?, ?, ?, ?, ?, '1', ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -135,12 +123,12 @@ module.exports = {
   },
   updateEngineer: function (req, res) {
     const waktu = new Date().toISOString();
-    var request = [req.name, req.lab, req.codename, req.email, waktu, req.id];
+    var request = [req.name, req.lab, req.email, waktu, req.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("UPDATE `test_engineers` SET `name`=?, `lab`=?, `codename`=?, `email`=?, `updated`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("UPDATE `test_engineers` SET `name`=?, `lab`=?, `email`=?, `updated`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);

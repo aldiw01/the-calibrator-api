@@ -2,7 +2,7 @@ require('dotenv/config')
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const routes = require('./routes')
+const routes = require('./src/routes')
 
 // Instantiating the express app
 const app = express();

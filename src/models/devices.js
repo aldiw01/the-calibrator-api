@@ -179,7 +179,7 @@ module.exports = {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_tot = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAL%' AND `due_date` < ? ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAL%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_cal = rows.info.numRows;
         var result = []
@@ -194,7 +194,7 @@ module.exports = {
           data.l_cal = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAB%' AND `due_date` < ? ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAB%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_cab = rows.info.numRows;
         var result = []
@@ -209,7 +209,7 @@ module.exports = {
           data.l_cab = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%TRA%' AND `due_date` < ? ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%TRA%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_tra = rows.info.numRows;
         var result = []
@@ -224,7 +224,7 @@ module.exports = {
           data.l_tra = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CPE%' AND `due_date` < ? ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CPE%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_dev = rows.info.numRows;
         var result = []
@@ -239,7 +239,7 @@ module.exports = {
           data.l_dev = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%ENE%' AND `due_date` < ? ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%ENE%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_ene = rows.info.numRows;
         var result = []
@@ -254,7 +254,7 @@ module.exports = {
           data.l_ene = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `due_date` < ? ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_tot = rows.info.numRows;
         var result = []
@@ -322,7 +322,7 @@ module.exports = {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("SELECT * FROM `devices` WHERE `due_date`<? AND `id` LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `devices` WHERE `due_date`<? AND `id` LIKE ? AND `defect_status`='0'", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);

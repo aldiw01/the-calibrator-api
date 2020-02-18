@@ -33,6 +33,7 @@ router.get('/role/:id', jwtMW, (req, res) => {
 })
 
 router.post('/', jwtMW, (req, res) => {
+  console.log(req.body)
   const password = crypto.createHmac(HASH_ALGORITHM, CIPHER_SECRET).update(req.body.password).digest(CIPHER_BASE);
   db.newEngineer(req.body, password, res)
 })
