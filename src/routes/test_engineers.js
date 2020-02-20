@@ -1,6 +1,7 @@
 
 const express = require('express')
 var router = express.Router()
+const multer = require('multer')
 var db = require('../models/test_engineers')
 const exjwt = require('express-jwt')
 const crypto = require("crypto")
@@ -9,6 +10,23 @@ const crypto = require("crypto")
 const jwtMW = exjwt({
   secret: process.env.APP_TOKEN_SECRET
 });
+
+const storageEngineers = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'src/uploads/engineers/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '_' + req.params.id);
+  }
+})
+
+function fileFilter(req, file, cb) {
+  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true)
+  } else {
+    cb({ message: 'Only for images (jpg/png).' }, false)
+  }
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // CONSTANT LIST
@@ -40,6 +58,37 @@ router.post('/', jwtMW, (req, res) => {
 
 router.put('/:id', jwtMW, (req, res) => {
   db.updateEngineer(req.body, res)
+})
+
+router.put('/photo/:id', jwtMW, (req, res) => {
+  var upload = multer({
+    storage: storageEngineers,
+    limits: {
+      fileSize: 1 * 1024 * 1024
+    },
+    fileFilter: fileFilter
+  }).single('profile_photo')
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading.
+      res.send(err)
+      return
+    } else if (err) {
+      // An unknown error occurred when uploading.
+      res.send(err)
+      return
+    } else if (req.file == undefined) {
+      res.send('index', { message: 'No file selected!' })
+      return
+    }
+    // Everything went fine.
+    console.log('Upload success.')
+
+    // File name key used while in production and filename in development
+    req.body.photo = req.file.filename
+
+    db.updateEngineerPhoto(req, res)
+  })
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////

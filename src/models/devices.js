@@ -404,6 +404,28 @@ module.exports = {
     });
     c.end();
   },
+  updateDeviceDocumentation: function (req, res) {
+    var request = [req.body.documentation, req.params.id];
+    if (request.includes(undefined) || request.includes("")) {
+      res.send({ message: 'Bad Request: Parameters cannot empty.' });
+      return
+    }
+    c.query("UPDATE `devices` SET `documentation`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      res.json({
+        affectedRows: rows.info.affectedRows,
+        err: null,
+        message: "Device documentation has updated successfully",
+        success: true
+      });
+    });
+    c.end();
+  },
   deactivateDevice: function (req, res) {
     const waktu = new Date().toISOString();
     var request = [waktu, req.id];

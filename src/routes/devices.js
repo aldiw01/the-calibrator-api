@@ -58,7 +58,7 @@ router.post('/', jwtMW, (req, res) => {
   var upload = multer({
     storage: storageDevices,
     limits: {
-      fileSize: 5 * 1024 * 1024
+      fileSize: 1 * 1024 * 1024
     },
     fileFilter: fileFilter
   }).fields([{ name: 'manual_file', maxCount: 1 }, { name: 'spec_file', maxCount: 1 }, { name: 'documentation', maxCount: 1 }])
@@ -89,6 +89,37 @@ router.post('/', jwtMW, (req, res) => {
 
 router.put('/:id', jwtMW, (req, res) => {
   db.updateDevice(req.body, res)
+})
+
+router.put('/documentation/:id', jwtMW, (req, res) => {
+  var upload = multer({
+    storage: storageDevices,
+    limits: {
+      fileSize: 1 * 1024 * 1024
+    },
+    fileFilter: fileFilter
+  }).single('documentation')
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading.
+      res.send(err)
+      return
+    } else if (err) {
+      // An unknown error occurred when uploading.
+      res.send(err)
+      return
+    } else if (req.file == undefined) {
+      res.send({ message: 'No file selected!' })
+      return
+    }
+    // Everything went fine.
+    console.log('Upload success.')
+
+    // File name key used while in production and filename in development
+    req.body.documentation = req.file.filename
+
+    db.updateDeviceDocumentation(req, res)
+  })
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////

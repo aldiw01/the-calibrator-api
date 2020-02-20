@@ -28,8 +28,9 @@ module.exports = {
           // password: items[3],
           email: items[4],
           role: items[5],
-          registered: items[6],
-          updated: items[7]
+          photo: items[6],
+          registered: items[7],
+          updated: items[8]
         });
       });
       if (data.length < 1) {
@@ -57,8 +58,9 @@ module.exports = {
           // password: items[3],
           email: items[4],
           role: items[5],
-          registered: items[6],
-          updated: items[7]
+          photo: items[6],
+          registered: items[7],
+          updated: items[8]
         });
       });
       if (data.length < 1) {
@@ -86,8 +88,9 @@ module.exports = {
           // password: items[3],
           email: items[4],
           role: items[5],
-          registered: items[6],
-          updated: items[7]
+          photo: items[6],
+          registered: items[7],
+          updated: items[8]
         });
       });
       if (data.length < 1) {
@@ -139,6 +142,29 @@ module.exports = {
         affectedRows: rows.info.affectedRows,
         err: null,
         message: "Engineer has updated successfully",
+        success: true
+      });
+    });
+    c.end();
+  },
+  updateEngineerPhoto: function (req, res) {
+    const waktu = new Date().toISOString();
+    var request = [req.body.photo, waktu, req.params.id];
+    if (request.includes(undefined) || request.includes("")) {
+      res.send({ message: 'Bad Request: Parameters cannot empty.' });
+      return
+    }
+    c.query("UPDATE `test_engineers` SET `photo`=?, `updated`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      res.json({
+        affectedRows: rows.info.affectedRows,
+        err: null,
+        message: "Profile photo has updated successfully",
         success: true
       });
     });

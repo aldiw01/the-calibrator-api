@@ -28,6 +28,7 @@ router.post('/login', (req, res) => {
   console.log("login")
 
   const password = crypto.createHmac(HASH_ALGORITHM, CIPHER_SECRET).update(req.body.password).digest(CIPHER_BASE);
+  console.log(password)
 
   db.cekLogin(email, password, function (err, data) {
     if (data.length === 1 && (data[0].role === "1" || data[0].role === "2")) {
@@ -36,9 +37,9 @@ router.post('/login', (req, res) => {
         id: data[0].id,
         name: data[0].name,
         lab: data[0].lab,
-        codename: data[0].codename,
         email: data[0].email,
         role: data[0].role,
+        photo: data[0].photo,
         registered: data[0].registered,
         updated: data[0].updated
       }, SECRET, { expiresIn: 43210 }); // Sigining the token

@@ -29,8 +29,9 @@ module.exports = {
             lab: items[2],
             email: items[4],
             role: items[5],
-            registered: items[6],
-            updated: items[7]
+            photo: items[6],
+            registered: items[7],
+            updated: items[8]
           });
         });
       }
