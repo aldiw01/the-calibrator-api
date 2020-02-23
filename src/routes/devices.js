@@ -15,7 +15,10 @@ const storageDevices = multer.diskStorage({
     cb(null, 'src/uploads/devices/')
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '_' + new Date().valueOf() + '_' + file.originalname)
+    if (req.params.id !== undefined)
+      cb(null, file.fieldname + '_' + req.params.id.replace("/", "-") + '_' + new Date().valueOf())
+    else
+      cb(null, file.fieldname + '_' + req.body.id.replace("/", "-") + '_' + new Date().valueOf())
   }
 })
 
@@ -24,6 +27,14 @@ function fileFilter(req, file, cb) {
     cb(null, true)
   } else {
     cb({ message: 'Only for images or documents (jpg/jpeg/png/pdf/doc).' }, false)
+  }
+};
+
+function fileFilter2(req, file, cb) {
+  if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true)
+  } else {
+    cb({ message: 'Only for images or documents (jpg/jpeg/png).' }, false)
   }
 };
 
@@ -71,17 +82,14 @@ router.post('/', jwtMW, (req, res) => {
       // An unknown error occurred when uploading.
       res.send(err)
       return
-    } else if (req.files == undefined) {
-      res.send({ message: 'No file selected!' })
-      return
     }
     // Everything went fine.
     console.log('Upload success.')
 
     // File name key used while in production and filename in development
-    req.body.manual_file = req.files.manual_file[0].filename
-    req.body.spec_file = req.files.spec_file[0].filename
-    req.body.documentation = req.files.documentation[0].filename
+    req.body.manual_file = req.files.manual_file ? req.files.manual_file[0].filename : ''
+    req.body.spec_file = req.files.spec_file ? req.files.spec_file[0].filename : ''
+    req.body.documentation = req.files.documentation[0].filename || ''
 
     db.newDevice(req.body, res)
   })
@@ -97,7 +105,7 @@ router.put('/documentation/:id', jwtMW, (req, res) => {
     limits: {
       fileSize: 1 * 1024 * 1024
     },
-    fileFilter: fileFilter
+    fileFilter: fileFilter2
   }).single('documentation')
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
@@ -119,6 +127,68 @@ router.put('/documentation/:id', jwtMW, (req, res) => {
     req.body.documentation = req.file.filename
 
     db.updateDeviceDocumentation(req, res)
+  })
+})
+
+router.put('/manual_file/:id', jwtMW, (req, res) => {
+  var upload = multer({
+    storage: storageDevices,
+    limits: {
+      fileSize: 5 * 1024 * 1024
+    },
+    fileFilter: fileFilter
+  }).single('manual_file')
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading.
+      res.send(err)
+      return
+    } else if (err) {
+      // An unknown error occurred when uploading.
+      res.send(err)
+      return
+    } else if (req.file == undefined) {
+      res.send({ message: 'No file selected!' })
+      return
+    }
+    // Everything went fine.
+    console.log('Upload success.')
+
+    // File name key used while in production and filename in development
+    req.body.manual_file = req.file.filename
+
+    db.updateDeviceManual(req, res)
+  })
+})
+
+router.put('/spec_file/:id', jwtMW, (req, res) => {
+  var upload = multer({
+    storage: storageDevices,
+    limits: {
+      fileSize: 5 * 1024 * 1024
+    },
+    fileFilter: fileFilter
+  }).single('spec_file')
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading.
+      res.send(err)
+      return
+    } else if (err) {
+      // An unknown error occurred when uploading.
+      res.send(err)
+      return
+    } else if (req.file == undefined) {
+      res.send({ message: 'No file selected!' })
+      return
+    }
+    // Everything went fine.
+    console.log('Upload success.')
+
+    // File name key used while in production and filename in development
+    req.body.spec_file = req.file.filename
+
+    db.updateDeviceSpecification(req, res)
   })
 })
 

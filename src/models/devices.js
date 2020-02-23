@@ -362,11 +362,12 @@ module.exports = {
     const waktu = new Date().toISOString();
     var id = req.id || 'D' + new Date(waktu).valueOf().toString(32).toUpperCase()
     var request = [id, req.name, req.manufacturer, req.model, req.serial_number, req.defect_status, req.calibration_date, req.due_date, req.calibration_period, req.supervisor, req.issue_date, req.test_interval, req.calibration_method, req.manual_file, req.spec_file, req.documentation];
+    console.log(request)
     // if (request.includes(undefined) || request.includes("")) {
     //   res.send({ message: 'Bad Request: Parameters cannot empty.' });
     //   return
     // }
-    c.query("INSERT INTO `devices`(`id`, `name`, `manufacturer`, `model`, `serial_number`, `defect_status`, `calibration_date`, `due_date`, `calibration_period`, `supervisor`, `issue_date`, `test_interval`, `calibration_method`, `manual_file`, `spec_file`, `documentation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("INSERT INTO `devices`(`id`, `name`, `manufacturer`, `model`, `serial_number`, `defect_status`, `calibration_date`, `due_date`, `calibration_period`, `supervisor`, `issue_date`, `test_interval`, `calibration_method`, `manual_file`, `spec_file`, `documentation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -426,6 +427,50 @@ module.exports = {
     });
     c.end();
   },
+  updateDeviceManual: function (req, res) {
+    var request = [req.body.manual_file, req.params.id];
+    if (request.includes(undefined) || request.includes("")) {
+      res.send({ message: 'Bad Request: Parameters cannot empty.' });
+      return
+    }
+    c.query("UPDATE `devices` SET `manual_file`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      res.json({
+        affectedRows: rows.info.affectedRows,
+        err: null,
+        message: "Device manual file has updated successfully",
+        success: true
+      });
+    });
+    c.end();
+  },
+  updateDeviceSpecification: function (req, res) {
+    var request = [req.body.spec_file, req.params.id];
+    if (request.includes(undefined) || request.includes("")) {
+      res.send({ message: 'Bad Request: Parameters cannot empty.' });
+      return
+    }
+    c.query("UPDATE `devices` SET `spec_file`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      res.json({
+        affectedRows: rows.info.affectedRows,
+        err: null,
+        message: "Device specification file has updated successfully",
+        success: true
+      });
+    });
+    c.end();
+  },
   deactivateDevice: function (req, res) {
     const waktu = new Date().toISOString();
     var request = [waktu, req.id];
@@ -466,7 +511,7 @@ module.exports = {
         return
       }
 
-      if (rows.info.numRows < 1) {
+      if (rows.info.affectedRows < 1) {
         res.status(404).send({ message: 'Data not found.' });
       } else {
         res.json({
@@ -487,7 +532,7 @@ module.exports = {
         return
       }
       console.log(rows.info)
-      if (rows.info.numRows < 1) {
+      if (rows.info.affectedRows < 1) {
         res.status(404).send({ message: 'Data not found.' });
       } else {
         res.json({
