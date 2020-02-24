@@ -358,6 +358,38 @@ module.exports = {
     });
     c.end();
   },
+  getDeviceRegularCheckSchedule: function (req, res) {
+    var waktu = new Date().toISOString().split("T");
+    c.query("SELECT * FROM `devices` WHERE `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      var data = [];
+      rows.forEach(function (items) {
+        var regular_check_date = new Date(items[6]).valueOf() + (new Date(items[7]).valueOf() - new Date(items[6]).valueOf()) / 2
+        data.push({
+          id: items[0],
+          name: items[1],
+          manufacturer: items[2],
+          model: items[3],
+          calibration_date: items[6],
+          due_date: items[7],
+          calibration_method: items[12],
+          documentation: items[15],
+          regular_check_date: regular_check_date
+        });
+      });
+      if (data.length < 1) {
+        res.status(404).send({ message: 'Data not found.' });
+      } else {
+        res.json(data);
+      }
+    });
+    c.end();
+  },
   newDevice: function (req, res) {
     const waktu = new Date().toISOString();
     var id = req.id || 'D' + new Date(waktu).valueOf().toString(32).toUpperCase()

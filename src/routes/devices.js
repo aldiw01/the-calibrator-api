@@ -65,6 +65,10 @@ router.get('/calibration_status/:lab', (req, res) => {
   db.getDeviceCalibrationStatus(req.params, res)
 })
 
+router.get('/schedule/regular_check', (req, res) => {
+  db.getDeviceRegularCheckSchedule(req.body, res)
+})
+
 router.post('/', jwtMW, (req, res) => {
   var upload = multer({
     storage: storageDevices,
