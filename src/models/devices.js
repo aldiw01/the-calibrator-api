@@ -359,7 +359,6 @@ module.exports = {
     c.end();
   },
   getDeviceRegularCheckSchedule: function (req, res) {
-    var waktu = new Date().toISOString().split("T");
     c.query("SELECT * FROM `devices` WHERE `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
@@ -380,6 +379,48 @@ module.exports = {
           calibration_method: items[12],
           documentation: items[15],
           regular_check_date: regular_check_date
+        });
+      });
+      if (data.length < 1) {
+        res.status(404).send({ message: 'Data not found.' });
+      } else {
+        res.json(data);
+      }
+    });
+    c.end();
+  },
+  getDeviceSearch: function (req, res) {
+    const request = ["%" + req.id + "%", "%" + req.id + "%"]
+    if (request.includes(undefined) || request.includes("")) {
+      res.send({ message: 'Bad Request: Parameters cannot empty.' });
+      return
+    }
+    c.query("SELECT * FROM `devices` WHERE `id` LIKE ? OR `name` LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      var data = [];
+      rows.forEach(function (items) {
+        data.push({
+          id: items[0],
+          name: items[1],
+          manufacturer: items[2],
+          model: items[3],
+          serial_number: items[4],
+          defect_status: items[5],
+          calibration_date: items[6],
+          due_date: items[7],
+          calibration_period: items[8],
+          supervisor: items[9],
+          issue_date: items[10],
+          test_interval: items[11],
+          calibration_method: items[12],
+          manual_file: items[13],
+          spec_file: items[14],
+          documentation: items[15]
         });
       });
       if (data.length < 1) {

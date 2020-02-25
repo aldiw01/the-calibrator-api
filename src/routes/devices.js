@@ -69,6 +69,10 @@ router.get('/schedule/regular_check', (req, res) => {
   db.getDeviceRegularCheckSchedule(req.body, res)
 })
 
+router.get('/search/:id', (req, res) => {
+  db.getDeviceSearch(req.params, res)
+})
+
 router.post('/', jwtMW, (req, res) => {
   var upload = multer({
     storage: storageDevices,
