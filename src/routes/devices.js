@@ -45,7 +45,7 @@ router.get('/', jwtMW, (req, res) => {
   db.getDeviceAll(req.body, res)
 })
 
-router.get('/dashboard/', (req, res) => {
+router.get('/dashboard/', jwtMW, (req, res) => {
   db.getDeviceDashboard(req.params, res)
 })
 
@@ -53,23 +53,27 @@ router.get('/:id', (req, res) => {
   db.getDevice(req.params, res)
 })
 
-router.get('/owner/:id', (req, res) => {
+router.get('/owner/:id', jwtMW, (req, res) => {
   db.getDeviceOwner(req.params, res)
 })
 
-router.get('/defect_status/:lab/:id', (req, res) => {
+router.get('/defect_status/:lab/:id', jwtMW, (req, res) => {
   db.getDeviceDefectStatus(req.params, res)
 })
 
-router.get('/calibration_status/:lab', (req, res) => {
+router.get('/calibration_status/:lab', jwtMW, (req, res) => {
   db.getDeviceCalibrationStatus(req.params, res)
 })
 
-router.get('/schedule/regular_check', (req, res) => {
-  db.getDeviceRegularCheckSchedule(req.body, res)
+router.get('/schedule/regular_check', jwtMW, (req, res) => {
+  db.getDeviceRegularCheckScheduleAll(req.params, res)
 })
 
-router.get('/search/:id', (req, res) => {
+router.get('/schedule/regular_check/:id', jwtMW, (req, res) => {
+  db.getDeviceRegularCheckSchedule(req.params, res)
+})
+
+router.get('/search/:id', jwtMW, (req, res) => {
   db.getDeviceSearch(req.params, res)
 })
 
