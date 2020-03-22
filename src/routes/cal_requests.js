@@ -20,20 +20,16 @@ router.get('/:id', (req, res) => {
   db.getCalRequest(req.params, res)
 })
 
+router.get('/lab/:id', jwtMW, (req, res) => {
+  db.getCalRequestLab(req.params, res)
+})
+
 router.get('/engineers/:id', jwtMW, (req, res) => {
   db.getCalRequestEngineer(req.params, res)
 })
 
-router.get('/requestors/:id', jwtMW, (req, res) => {
-  db.getCalRequestRequestor(req.params, res)
-})
-
-router.get('/devices/:id', jwtMW, (req, res) => {
-  db.getCalRequestDevice(req.params, res)
-})
-
-router.get('/cal_steps/:id', jwtMW, (req, res) => {
-  db.getCalRequestCalStep(req.params, res)
+router.get('/type/:id', jwtMW, (req, res) => {
+  db.getCalRequestType(req.params, res)
 })
 
 router.get('/cal_certificate/:id', jwtMW, (req, res) => {
