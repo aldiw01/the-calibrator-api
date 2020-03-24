@@ -50,6 +50,10 @@ router.get('/role/:id', jwtMW, (req, res) => {
   db.getEngineerRole(req.params, res)
 })
 
+router.get('/search/:id', (req, res) => {
+  db.getEngineerSearch(req.params, res)
+})
+
 router.post('/', jwtMW, (req, res) => {
   console.log(req.body)
   const password = crypto.createHmac(HASH_ALGORITHM, CIPHER_SECRET).update(req.body.password).digest(CIPHER_BASE);

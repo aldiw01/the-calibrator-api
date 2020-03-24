@@ -12,7 +12,7 @@ module.exports = {
   // CALIBRATION CERTIFICATE MODELS
 
   getCertificateAll: function (req, res) {
-    c.query("SELECT * FROM `cal_certificates`", null, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -39,7 +39,7 @@ module.exports = {
     c.end();
   },
   getCertificate: function (req, res) {
-    c.query("SELECT * FROM `cal_certificates` WHERE id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id` WHERE id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -66,7 +66,7 @@ module.exports = {
     c.end();
   },
   getCertificateDevice: function (req, res) {
-    c.query("SELECT * FROM `cal_certificates` WHERE device_id = ? ORDER BY `calibration_date` DESC", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id` WHERE device_id = ? ORDER BY `calibration_date` DESC", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -93,7 +93,7 @@ module.exports = {
     c.end();
   },
   getCertificateEngineer: function (req, res) {
-    c.query("SELECT * FROM `cal_certificates` WHERE test_engineer_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id` WHERE test_engineer_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);

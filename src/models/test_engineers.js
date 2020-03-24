@@ -12,7 +12,7 @@ module.exports = {
   // TEST ENGINEER MODELS
 
   getEngineerAll: function (req, res) {
-    c.query("SELECT * FROM `test_engineers` ORDER BY `created` DESC", null, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `test_engineers`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -42,7 +42,7 @@ module.exports = {
     c.end();
   },
   getEngineer: function (req, res) {
-    c.query("SELECT * FROM `test_engineers` WHERE id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `test_engineers` WHERE `id`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -72,7 +72,38 @@ module.exports = {
     c.end();
   },
   getEngineerRole: function (req, res) {
-    c.query("SELECT * FROM `test_engineers` WHERE role=? ORDER BY `created` DESC", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `test_engineers` WHERE `role`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      var data = [];
+      rows.forEach(function (items) {
+        data.push({
+          id: items[0],
+          name: items[1],
+          lab: items[2],
+          // password: items[3],
+          email: items[4],
+          role: items[5],
+          photo: items[6],
+          registered: items[7],
+          updated: items[8]
+        });
+      });
+      if (data.length < 1) {
+        res.status(404).send('Data not found.');
+      } else {
+        res.json(data);
+      }
+    });
+    c.end();
+  },
+  getEngineerSearch: function (req, res) {
+    var request = ["%" + req.id + "%", "%" + req.id + "%"];
+    c.query("SELECT * FROM `test_engineers` WHERE `id` LIKE ? OR `name` LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
