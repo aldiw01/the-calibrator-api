@@ -12,7 +12,7 @@ module.exports = {
   // CALIBRATION REQUEST MODELS
 
   getCalRequestAll: function (req, res) {
-    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`type`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, TE2.`name`, TE3.`name`, Req.`test_report` FROM `cal_requests` Req INNER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` INNER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` INNER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id`", null, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`type`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, IFNULL(TE2.`name`, ''), IFNULL(TE3.`name`, ''), Req.`test_report` FROM `cal_requests` Req LEFT OUTER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` LEFT OUTER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` LEFT OUTER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -266,6 +266,7 @@ module.exports = {
   newCalRequest: function (req, res) {
     var request = [req.id, req.lab, req.request_type, req.device_name, req.manufacturer, req.type, req.serial_number, req.capacity, req.made_in, req.test_reference, req.company_name, req.company_address, req.created, req.start_target, req.finished_target, req.actual_start, req.actual_finished, req.engineer_1, req.engineer_2, req.engineer_3, req.test_report];
 
+    console.log(request)
     // SOME VALUE(S) CAN BE NULL
 
     c.query("INSERT INTO `cal_requests`(`id`, `lab`, `request_type`, `device_name`, `manufacturer`, `type`, `serial_number`, `capacity`, `made_in`, `test_reference`, `company_name`, `company_address`, `created`, `start_target`, `finished_target`, `actual_start`, `actual_finished`, `engineer_1`, `engineer_2`, `engineer_3`, `test_report`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
@@ -285,11 +286,11 @@ module.exports = {
     c.end();
   },
   updateCalRequest: function (req, res) {
-    var request = [req.lab, req.request_type, req.device_name, req.manufacturer, req.type, req.serial_number, req.capacity, req.made_in, req.test_reference, req.company_name, req.company_address, req.created, req.start_target, req.finished_target, req.actual_start, req.actual_finished, req.engineer_1, req.engineer_2, req.engineer_3, req.id];
+    var request = [req.device_name, req.manufacturer, req.type, req.serial_number, req.capacity, req.made_in, req.test_reference, req.company_name, req.company_address, req.created, req.start_target, req.finished_target, req.actual_start, req.actual_finished, req.id];
 
     // SOME VALUE(S) CAN BE NULL
 
-    c.query("UPDATE `cal_requests` SET `lab`=?, `request_type`=?, `device_name`=?, `manufacturer`=?, `type`=?, `serial_number`=?, `capacity`=?, `made_in`=?, `test_reference`=?, `company_name`=?, `company_address`=?, `created`=?, `start_target`=?, `finished_target`=?, `actual_start`=?, `actual_finished`=?, `engineer_1`=?, `engineer_2`=?, `engineer_3`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("UPDATE `cal_requests` SET `device_name`=?, `manufacturer`=?, `type`=?, `serial_number`=?, `capacity`=?, `made_in`=?, `test_reference`=?, `company_name`=?, `company_address`=?, `created`=?, `start_target`=?, `finished_target`=?, `actual_start`=?, `actual_finished`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
