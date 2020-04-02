@@ -33,6 +33,19 @@ app.use(function (err, req, res, next) {
 	}
 });
 
+app.get('*', function (req, res) {
+	res.status(404).send('Sorry, are you lost m8?');
+});
+
+// app.use(function (err, req, res, next) {
+// 	if (err instanceof NotFound) {
+// 		// Render a page here
+// 		res.render('404.jade');
+// 	} else {
+// 		next(err);
+// 	}
+// });
+
 app.get('/', (req, res) => {
 	res.redirect('http://the-calibrator.netlify.com');
 });

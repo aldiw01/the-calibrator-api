@@ -12,7 +12,7 @@ const jwtMW = exjwt({
 
 const storageForms = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, __dirname + '/uploads/forms/')
+    cb(null, 'src/uploads/forms/')
   },
   filename: function (req, file, cb) {
     cb(null, new Date().toISOString().replace(/:/g, '-') + '_' + file.originalname)

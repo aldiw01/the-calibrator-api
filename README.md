@@ -65,11 +65,11 @@ Info about Status ID, any configuration may change in future update.
 0. Not verified
 1. Active/Staff
 2. Super Admin
-3. Lab Manager 1
-4. Lab Manager 2
-5. RESERVED
-6. RESERVED
-7. RESERVED
+3. Lab Manager 1 / IQA
+4. Lab Manager 2 / DEQA
+5. Lab Manager 3 / UREL
+6. Lab Manager 4 / SIR
+7. SM PIA
 8. Guest
 9. Deactivated
 ```
