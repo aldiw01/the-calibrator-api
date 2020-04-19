@@ -73,3 +73,10 @@ Info about Status ID, any configuration may change in future update.
 8. Guest
 9. Deactivated
 ```
+
+#### Device Defect status
+```
+0. Good
+1. Defect
+2. Inactive
+```

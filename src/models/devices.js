@@ -34,10 +34,11 @@ module.exports = {
           supervisor: items[9],
           issue_date: items[10],
           test_interval: items[11],
-          calibration_method: items[12],
-          manual_file: items[13],
-          spec_file: items[14],
-          documentation: items[15]
+          calibration_object: items[12],
+          calibration_method: items[13],
+          manual_file: items[14],
+          spec_file: items[15],
+          documentation: items[16]
         });
       });
       if (data.length < 1) {
@@ -71,10 +72,11 @@ module.exports = {
           supervisor: items[9],
           issue_date: items[10],
           test_interval: items[11],
-          calibration_method: items[12],
-          manual_file: items[13],
-          spec_file: items[14],
-          documentation: items[15]
+          calibration_object: items[12],
+          calibration_method: items[13],
+          manual_file: items[14],
+          spec_file: items[15],
+          documentation: items[16]
         });
       });
       if (data.length < 1) {
@@ -109,10 +111,11 @@ module.exports = {
           supervisor: items[9],
           issue_date: items[10],
           test_interval: items[11],
-          calibration_method: items[12],
-          manual_file: items[13],
-          spec_file: items[14],
-          documentation: items[15]
+          calibration_object: items[12],
+          calibration_method: items[13],
+          manual_file: items[14],
+          spec_file: items[15],
+          documentation: items[16]
         });
       });
       if (data.length < 1) {
@@ -155,31 +158,31 @@ module.exports = {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.ene = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAL%' AND `defect_status`='1'", null, { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAL%' AND `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_cal = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAB%' AND `defect_status`='1'", null, { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAB%' AND `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_cab = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%TRA%' AND `defect_status`='1'", null, { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%TRA%' AND `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_tra = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CPE%' AND `defect_status`='1'", null, { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CPE%' AND `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_dev = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%ENE%' AND `defect_status`='1'", null, { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%ENE%' AND `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_ene = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `defect_status`='1'", null, { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.d_tot = rows.info.numRows;
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAL%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAL%' AND `calibration_object` = 1 AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_cal = rows.info.numRows;
         var result = []
@@ -194,7 +197,7 @@ module.exports = {
           data.l_cal = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAB%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CAB%' AND `calibration_object` = 1 AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_cab = rows.info.numRows;
         var result = []
@@ -209,7 +212,7 @@ module.exports = {
           data.l_cab = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%TRA%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%TRA%' AND `calibration_object` = 1 AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_tra = rows.info.numRows;
         var result = []
@@ -224,7 +227,7 @@ module.exports = {
           data.l_tra = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CPE%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%CPE%' AND `calibration_object` = 1 AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_dev = rows.info.numRows;
         var result = []
@@ -239,7 +242,7 @@ module.exports = {
           data.l_dev = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%ENE%' AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `id` LIKE '%ENE%' AND `calibration_object` = 1 AND `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_ene = rows.info.numRows;
         var result = []
@@ -254,7 +257,7 @@ module.exports = {
           data.l_ene = result
         }
       });
-      c.query("SELECT * FROM `devices` WHERE `due_date` < ? AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
+      c.query("SELECT * FROM `devices` WHERE `due_date` < ? AND `calibration_object` = 1 AND `defect_status`='0' ORDER BY `due_date`", [waktu[0]], { metadata: true, useArray: true }, function (err, rows) {
         if (err) { res.status(500).send({ message: "Error 500: Internal Server Error" }); return }
         data.u_tot = rows.info.numRows;
         var result = []
@@ -274,12 +277,18 @@ module.exports = {
     c.end();
   },
   getDeviceDefectStatus: function (req, res) {
-    const request = [req.id, "%" + req.lab + "%"]
+    var query = '';
+    const request = ["%" + req.lab + "%"]
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("SELECT * FROM `devices` WHERE `defect_status`=? AND id LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
+    if (req.id === "0") {
+      query = "SELECT * FROM `devices` WHERE `defect_status`=0 AND id LIKE ?";
+    } else {
+      query = "SELECT * FROM `devices` WHERE `defect_status`!=0 AND id LIKE ?";
+    }
+    c.query(query, request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -301,10 +310,11 @@ module.exports = {
           supervisor: items[9],
           issue_date: items[10],
           test_interval: items[11],
-          calibration_method: items[12],
-          manual_file: items[13],
-          spec_file: items[14],
-          documentation: items[15]
+          calibration_object: items[12],
+          calibration_method: items[13],
+          manual_file: items[14],
+          spec_file: items[15],
+          documentation: items[16]
         });
       });
       if (data.length < 1) {
@@ -322,7 +332,7 @@ module.exports = {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("SELECT * FROM `devices` WHERE `due_date`<? AND `id` LIKE ? AND `defect_status`='0'", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `devices` WHERE `due_date`<? AND `id` LIKE ? AND `defect_status`='0' AND `calibration_object` = 1", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -344,10 +354,11 @@ module.exports = {
           supervisor: items[9],
           issue_date: items[10],
           test_interval: items[11],
-          calibration_method: items[12],
-          manual_file: items[13],
-          spec_file: items[14],
-          documentation: items[15]
+          calibration_object: items[12],
+          calibration_method: items[13],
+          manual_file: items[14],
+          spec_file: items[15],
+          documentation: items[16]
         });
       });
       if (data.length < 1) {
@@ -359,7 +370,7 @@ module.exports = {
     c.end();
   },
   getDeviceRegularCheckScheduleAll: function (req, res) {
-    c.query("SELECT * FROM `devices` WHERE `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `devices` WHERE calibration_object = 1 AND `defect_status`='0'", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -368,7 +379,24 @@ module.exports = {
 
       var data = [];
       rows.forEach(function (items) {
-        var regular_check_date = new Date(items[6]).valueOf() + (new Date(items[7]).valueOf() - new Date(items[6]).valueOf()) / 2
+        const start = new Date(items[6]).valueOf()
+        const end = new Date(items[7]).valueOf()
+        const test_interval = items[11]
+        var num_check = Math.floor((end - start) / (test_interval * 31 * 24 * 60 * 60 * 1000))
+        for (var i = 1; i <= num_check; i++) {
+          data.push({
+            id: items[0],
+            name: items[1],
+            manufacturer: items[2],
+            model: items[3],
+            calibration_date: items[6],
+            due_date: items[7],
+            calibration_method: items[13],
+            documentation: items[16],
+            regular_check_date: new Date(items[6]).valueOf() + (i * test_interval * 30 * 24 * 60 * 60 * 1000),
+            type: "intermediate check"
+          });
+        }
         data.push({
           id: items[0],
           name: items[1],
@@ -376,9 +404,10 @@ module.exports = {
           model: items[3],
           calibration_date: items[6],
           due_date: items[7],
-          calibration_method: items[12],
-          documentation: items[15],
-          regular_check_date: regular_check_date
+          calibration_method: items[13],
+          documentation: items[16],
+          regular_check_date: items[7],
+          type: "calibration"
         });
       });
       if (data.length < 1) {
@@ -391,7 +420,7 @@ module.exports = {
   },
   getDeviceRegularCheckSchedule: function (req, res) {
     const request = ["%" + req.id + "%"]
-    c.query("SELECT * FROM `devices` WHERE `defect_status`='0' AND `id` LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT * FROM `devices` WHERE calibration_object = 1 AND `defect_status`='0' AND `id` LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -400,7 +429,24 @@ module.exports = {
 
       var data = [];
       rows.forEach(function (items) {
-        var regular_check_date = new Date(items[6]).valueOf() + (new Date(items[7]).valueOf() - new Date(items[6]).valueOf()) / 2
+        const start = new Date(items[6]).valueOf()
+        const end = new Date(items[7]).valueOf()
+        const test_interval = items[11]
+        var num_check = Math.floor((end - start) / (test_interval * 31 * 24 * 60 * 60 * 1000))
+        for (var i = 1; i <= num_check; i++) {
+          data.push({
+            id: items[0],
+            name: items[1],
+            manufacturer: items[2],
+            model: items[3],
+            calibration_date: items[6],
+            due_date: items[7],
+            calibration_method: items[13],
+            documentation: items[16],
+            regular_check_date: new Date(items[6]).valueOf() + (i * test_interval * 30 * 24 * 60 * 60 * 1000),
+            type: "intermediate check"
+          });
+        }
         data.push({
           id: items[0],
           name: items[1],
@@ -408,9 +454,10 @@ module.exports = {
           model: items[3],
           calibration_date: items[6],
           due_date: items[7],
-          calibration_method: items[12],
-          documentation: items[15],
-          regular_check_date: regular_check_date
+          calibration_method: items[13],
+          documentation: items[16],
+          regular_check_date: items[7],
+          type: "calibration"
         });
       });
       if (data.length < 1) {
@@ -449,10 +496,11 @@ module.exports = {
           supervisor: items[9],
           issue_date: items[10],
           test_interval: items[11],
-          calibration_method: items[12],
-          manual_file: items[13],
-          spec_file: items[14],
-          documentation: items[15]
+          calibration_object: items[12],
+          calibration_method: items[13],
+          manual_file: items[14],
+          spec_file: items[15],
+          documentation: items[16]
         });
       });
       if (data.length < 1) {
@@ -466,13 +514,13 @@ module.exports = {
   newDevice: function (req, res) {
     const waktu = new Date().toISOString();
     var id = req.id || 'D' + new Date(waktu).valueOf().toString(32).toUpperCase()
-    var request = [id, req.name, req.manufacturer, req.model, req.serial_number, req.defect_status, req.calibration_date, req.due_date, req.calibration_period, req.supervisor, req.issue_date, req.test_interval, req.calibration_method, req.manual_file, req.spec_file, req.documentation];
+    var request = [id, req.name, req.manufacturer, req.model, req.serial_number, req.defect_status, req.calibration_date, req.due_date, req.calibration_period, req.supervisor, req.issue_date, req.test_interval, req.calibration_object, req.calibration_method, req.manual_file, req.spec_file, req.documentation];
     console.log(request)
     // if (request.includes(undefined) || request.includes("")) {
     //   res.send({ message: 'Bad Request: Parameters cannot empty.' });
     //   return
     // }
-    c.query("INSERT INTO `devices`(`id`, `name`, `manufacturer`, `model`, `serial_number`, `defect_status`, `calibration_date`, `due_date`, `calibration_period`, `supervisor`, `issue_date`, `test_interval`, `calibration_method`, `manual_file`, `spec_file`, `documentation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("INSERT INTO `devices`(`id`, `name`, `manufacturer`, `model`, `serial_number`, `defect_status`, `calibration_date`, `due_date`, `calibration_period`, `supervisor`, `issue_date`, `test_interval`, `calibration_object`, `calibration_method`, `manual_file`, `spec_file`, `documentation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -489,12 +537,12 @@ module.exports = {
     c.end();
   },
   updateDevice: function (req, res) {
-    var request = [req.name, req.manufacturer, req.model, req.serial_number, req.defect_status, req.calibration_date, req.due_date, req.calibration_period, req.supervisor, req.issue_date, req.test_interval, req.calibration_method, req.id];
+    var request = [req.name, req.manufacturer, req.model, req.serial_number, req.defect_status, req.calibration_date, req.due_date, req.calibration_period, req.supervisor, req.issue_date, req.test_interval, req.calibration_object, req.calibration_method, req.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("UPDATE `devices` SET `name`=?, `manufacturer`=?, `model`=?, `serial_number`=?, `defect_status`=?, `calibration_date`=?, `due_date`=?, `calibration_period`=?, `supervisor`=?, `issue_date`=?, `test_interval`=?, `calibration_method`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("UPDATE `devices` SET `name`=?, `manufacturer`=?, `model`=?, `serial_number`=?, `defect_status`=?, `calibration_date`=?, `due_date`=?, `calibration_period`=?, `supervisor`=?, `issue_date`=?, `test_interval`=?, `calibration_object`=?, `calibration_method`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);

@@ -34,7 +34,7 @@ function fileFilter2(req, file, cb) {
   if (file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     cb(null, true)
   } else {
-    cb({ message: 'Only for images or documents (jpg/jpeg/png).' }, false)
+    cb({ message: 'Only for images (jpg/jpeg/png).' }, false)
   }
 };
 
@@ -45,7 +45,7 @@ router.get('/', jwtMW, (req, res) => {
   db.getDeviceAll(req.body, res)
 })
 
-router.get('/dashboard/', jwtMW, (req, res) => {
+router.get('/dashboard/', (req, res) => {
   db.getDeviceDashboard(req.params, res)
 })
 
@@ -61,11 +61,11 @@ router.get('/defect_status/:lab/:id', jwtMW, (req, res) => {
   db.getDeviceDefectStatus(req.params, res)
 })
 
-router.get('/calibration_status/:lab', jwtMW, (req, res) => {
+router.get('/lab/:lab', jwtMW, (req, res) => {
   db.getDeviceCalibrationStatus(req.params, res)
 })
 
-router.get('/schedule/regular_check', jwtMW, (req, res) => {
+router.get('/schedule/regular_check', (req, res) => {
   db.getDeviceRegularCheckScheduleAll(req.params, res)
 })
 

@@ -9,10 +9,10 @@ const c = new Client({
 module.exports = {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-  // CALIBRATION CERTIFICATE MODELS
+  // CALIBRATION RESULT MODELS
 
-  getCertificateAll: function (req, res) {
-    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id`", null, { metadata: true, useArray: true }, function (err, rows) {
+  getMeasuringEquipmentAll: function (req, res) {
+    c.query("SELECT * FROM `measuring_equipment`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -23,11 +23,12 @@ module.exports = {
       rows.forEach(function (items) {
         data.push({
           id: items[0],
-          device_id: items[1],
-          calibration_date: items[2],
-          due_date: items[3],
-          test_engineer_id: items[4],
-          certificate_file: items[5]
+          request_id: items[1],
+          device_name: items[2],
+          manufacturer: items[3],
+          model: items[4],
+          serial_number: items[5],
+          device_id: items[6]
         });
       });
       if (data.length < 1) {
@@ -38,8 +39,8 @@ module.exports = {
     });
     c.end();
   },
-  getCertificate: function (req, res) {
-    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id` WHERE cert.`id`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+  getMeasuringEquipment: function (req, res) {
+    c.query("SELECT * FROM `measuring_equipment` WHERE id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -50,11 +51,12 @@ module.exports = {
       rows.forEach(function (items) {
         data.push({
           id: items[0],
-          device_id: items[1],
-          calibration_date: items[2],
-          due_date: items[3],
-          test_engineer_id: items[4],
-          certificate_file: items[5]
+          request_id: items[1],
+          device_name: items[2],
+          manufacturer: items[3],
+          model: items[4],
+          serial_number: items[5],
+          device_id: items[6]
         });
       });
       if (data.length < 1) {
@@ -65,8 +67,8 @@ module.exports = {
     });
     c.end();
   },
-  getCertificateDevice: function (req, res) {
-    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id` WHERE cert.`device_id` = ? ORDER BY `calibration_date` DESC", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+  getMeasuringEquipmentRequest: function (req, res) {
+    c.query("SELECT * FROM `measuring_equipment` WHERE request_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -77,11 +79,12 @@ module.exports = {
       rows.forEach(function (items) {
         data.push({
           id: items[0],
-          device_id: items[1],
-          calibration_date: items[2],
-          due_date: items[3],
-          test_engineer_id: items[4],
-          certificate_file: items[5]
+          request_id: items[1],
+          device_name: items[2],
+          manufacturer: items[3],
+          model: items[4],
+          serial_number: items[5],
+          device_id: items[6]
         });
       });
       if (data.length < 1) {
@@ -92,8 +95,8 @@ module.exports = {
     });
     c.end();
   },
-  getCertificateEngineer: function (req, res) {
-    c.query("SELECT cert.`id`, cert.`device_id`, cert.`calibration_date`, cert.`due_date`, te.`name`, cert.`certificate_file` FROM `cal_certificates` cert INNER JOIN `test_engineers` te ON cert.`test_engineer_id`=te.`id` WHERE cert.`test_engineer_id`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+  getMeasuringEquipmentDeviceID: function (req, res) {
+    c.query("SELECT * FROM `measuring_equipment` WHERE device_id=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -104,11 +107,12 @@ module.exports = {
       rows.forEach(function (items) {
         data.push({
           id: items[0],
-          device_id: items[1],
-          calibration_date: items[2],
-          due_date: items[3],
-          test_engineer_id: items[4],
-          certificate_file: items[5]
+          request_id: items[1],
+          device_name: items[2],
+          manufacturer: items[3],
+          model: items[4],
+          serial_number: items[5],
+          device_id: items[6]
         });
       });
       if (data.length < 1) {
@@ -119,36 +123,22 @@ module.exports = {
     });
     c.end();
   },
-  newCertificate: function (req, res) {
-    var request = [req.id, req.device_id, req.calibration_date, req.due_date, req.test_engineer_id, req.certificate_file];
-    if (request.includes(undefined) || request.includes("")) {
-      res.send({ message: 'Bad Request: Parameters cannot empty.' });
-      return
-    }
-    c.query("INSERT INTO `cal_certificates`(`id`, `device_id`, `calibration_date`, `due_date`, `test_engineer_id`, `certificate_file`) VALUES (?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
-      if (err) {
-        res.status(500).send({ message: "Error 500: Internal Server Error" });
-        console.log(err);
-        return
-      }
-
-      res.json({
-        affectedRows: rows.info.affectedRows,
-        err: null,
-        message: "Certificate has registered successfully",
-        success: true
-      });
-    });
-    c.end();
-  },
-  updateCertificate: function (req, res) {
+  newMeasuringEquipment: function (req, res) {
     const waktu = new Date().toISOString();
-    var request = [req.device_id, req.calibration_date, req.due_date, req.test_engineer_id, req.id];
+    var request = [
+      'M' + new Date(waktu).valueOf().toString(32).toUpperCase(),
+      req.request_id,
+      req.device_name,
+      req.manufacturer,
+      req.model,
+      req.serial_number,
+      req.device_id,
+    ];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("UPDATE `cal_certificates` SET `device_id`=?, `calibration_date`=?, `due_date`=?, `test_engineer_id`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("INSERT INTO `measuring_equipment`(`id`, `request_id`, `device_name`, `manufacturer`, `model`, `serial_number`, `device_id`) VALUES (?, ?, ?, ?, ?, ?, ?)", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -158,19 +148,41 @@ module.exports = {
       res.json({
         affectedRows: rows.info.affectedRows,
         err: null,
-        message: "Certificate has updated successfully",
+        message: "Measuring Equipment has registered successfully",
         success: true
       });
     });
     c.end();
   },
-  deleteCertificate: function (req, res) {
+  updateMeasuringEquipment: function (req, res) {
+    var request = [req.device_name, req.manufacturer, req.model, req.serial_number, req.device_id, req.id];
+    if (request.includes(undefined) || request.includes("")) {
+      res.send({ message: 'Bad Request: Parameters cannot empty.' });
+      return
+    }
+    c.query("UPDATE `measuring_equipment` SET `device_name`=?, `manufacturer`=?, `model`=?, `serial_number`=?, `device_id`=? WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      res.json({
+        affectedRows: rows.info.affectedRows,
+        err: null,
+        message: "Measuring Equipment has updated successfully",
+        success: true
+      });
+    });
+    c.end();
+  },
+  deleteMeasuringEquipment: function (req, res) {
     var request = [req.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return
     }
-    c.query("DELETE FROM `cal_certificates` WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
+    c.query("DELETE FROM `measuring_equipment` WHERE `id`=?", request, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -183,15 +195,15 @@ module.exports = {
         res.json({
           affectedRows: rows.info.affectedRows,
           err: null,
-          message: "Certificate has deleted successfully",
+          message: "Measuring Equipment has deleted successfully",
           success: true
         });
       }
     });
     c.end();
   },
-  deleteCertificateAll: function (req, res) {
-    c.query("DELETE FROM `cal_certificates`", null, { metadata: true, useArray: true }, function (err, rows) {
+  deleteMeasuringEquipmentAll: function (req, res) {
+    c.query("DELETE FROM `measuring_equipment`", null, { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -203,7 +215,7 @@ module.exports = {
       } else {
         res.json({
           affectedRows: rows.info.affectedRows,
-          message: "All Certificate has deleted successfully :[",
+          message: "All Measuring Equipment has deleted successfully :[",
           success: true
         });
       }

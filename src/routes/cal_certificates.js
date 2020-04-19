@@ -38,7 +38,7 @@ router.get('/:id', (req, res) => {
   db.getCertificate(req.params, res)
 })
 
-router.get('/devices/:id', jwtMW, (req, res) => {
+router.get('/devices/:id', (req, res) => {
   db.getCertificateDevice(req.params, res)
 })
 

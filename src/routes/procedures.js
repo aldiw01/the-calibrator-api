@@ -6,7 +6,6 @@ var db = require('../models/procedures')
 const exjwt = require('express-jwt')
 var path = require('path')
 
-
 // Instantiating the express-jwt middleware
 const jwtMW = exjwt({
   secret: process.env.APP_TOKEN_SECRET
