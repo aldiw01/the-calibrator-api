@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   db.getHistory(req.params, res)
 })
 
-router.get('/reference/:id', (req, res) => {
+router.get('/reference/:id', jwtMW, (req, res) => {
   db.getHistoryReference(req.params, res)
 })
 
@@ -30,6 +30,10 @@ router.get('/engineers/:id', jwtMW, (req, res) => {
 
 router.get('/cal_steps/:id', jwtMW, (req, res) => {
   db.getHistoryCalStep(req.params, res)
+})
+
+router.get('/request_step/:id', (req, res) => {
+  db.getHistoryRequestStep(req.params, res)
 })
 
 router.post('/', jwtMW, (req, res) => {

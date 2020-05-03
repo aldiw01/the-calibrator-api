@@ -155,7 +155,7 @@ module.exports = {
     c.end();
   },
   updateMeasuringEquipment: function (req, res) {
-    var request = [req.device_name, req.manufacturer, req.model, req.serial_number, req.device_id, req.id];
+    var request = [req.body.device_name, req.body.manufacturer, req.body.model, req.body.serial_number, req.body.device_id, req.params.id];
     if (request.includes(undefined) || request.includes("")) {
       res.send({ message: 'Bad Request: Parameters cannot empty.' });
       return

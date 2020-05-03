@@ -33,7 +33,7 @@ router.post('/', jwtMW, (req, res) => {
 })
 
 router.put('/:id', jwtMW, (req, res) => {
-  db.updateMeasuringEquipment(req.body, res)
+  db.updateMeasuringEquipment(req, res)
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////////

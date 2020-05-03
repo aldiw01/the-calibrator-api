@@ -54,7 +54,7 @@ module.exports = {
     c.end();
   },
   getCalRequest: function (req, res) {
-    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, TE2.`name`, TE3.`name`, Req.`documentation` FROM `cal_requests` Req INNER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` INNER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` INNER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`id`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, IFNULL(TE2.`name`, ''), IFNULL(TE3.`name`, ''), Req.`documentation` FROM `cal_requests` Req LEFT OUTER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` LEFT OUTER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` LEFT OUTER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`id`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -96,7 +96,7 @@ module.exports = {
     c.end();
   },
   getCalRequestLab: function (req, res) {
-    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, TE2.`name`, TE3.`name`, Req.`documentation` FROM `cal_requests` Req INNER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` INNER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` INNER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`lab`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, IFNULL(TE2.`name`, ''), IFNULL(TE3.`name`, ''), Req.`documentation` FROM `cal_requests` Req LEFT OUTER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` LEFT OUTER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` LEFT OUTER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`lab`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -138,7 +138,7 @@ module.exports = {
     c.end();
   },
   getCalRequestEngineer: function (req, res) {
-    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, TE2.`name`, TE3.`name`, Req.`documentation` FROM `cal_requests` Req INNER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` INNER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` INNER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`engineer_1`=? OR Req.`engineer_2`=? OR Req.`engineer_3`=?", [req.id, req.id, req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, IFNULL(TE2.`name`, ''), IFNULL(TE3.`name`, ''), Req.`documentation` FROM `cal_requests` Req LEFT OUTER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` LEFT OUTER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` LEFT OUTER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`engineer_1`=? OR Req.`engineer_2`=? OR Req.`engineer_3`=?", [req.id, req.id, req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);
@@ -180,7 +180,7 @@ module.exports = {
     c.end();
   },
   getCalRequestType: function (req, res) {
-    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, TE2.`name`, TE3.`name`, Req.`documentation` FROM `cal_requests` Req INNER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` INNER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` INNER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`request_type`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
+    c.query("SELECT Req.`id`, Req.`lab`, Req.`request_type`, Req.`device_name`, Req.`manufacturer`, Req.`model`, Req.`serial_number`, Req.`capacity`, Req.`made_in`, Req.`test_reference`, Req.`company_name`, Req.`company_address`, Req.`created`, Req.`start_target`, Req.`finished_target`, Req.`actual_start`, Req.`actual_finished`, TE1.`name`, IFNULL(TE2.`name`, ''), IFNULL(TE3.`name`, ''), Req.`documentation` FROM `cal_requests` Req LEFT OUTER JOIN `test_engineers` TE1 ON Req.`engineer_1` = TE1.`id` LEFT OUTER JOIN `test_engineers` TE2 ON Req.`engineer_2` = TE2.`id` LEFT OUTER JOIN `test_engineers` TE3 ON Req.`engineer_3` = TE3.`id` WHERE Req.`request_type`=?", [req.id], { metadata: true, useArray: true }, function (err, rows) {
       if (err) {
         res.status(500).send({ message: "Error 500: Internal Server Error" });
         console.log(err);

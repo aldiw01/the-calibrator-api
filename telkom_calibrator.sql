@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2020 at 08:06 PM
+-- Generation Time: Apr 30, 2020 at 09:30 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 5.6.33
 
@@ -194,16 +194,30 @@ INSERT INTO `cal_steps` (`id`, `step_name`, `step_number`, `info`, `created`, `u
 ('RAW1', 'Add', 0, 'has add the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('RAW2', 'Edit', 0, 'has edit the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('RAW3', 'Delete', 0, 'has delete the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQ1', 'Add', 0, 'has add the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQ1', 'Add', 1, 'has add the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('REQ2', 'Edit', 0, 'has edit the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('REQ3', 'Delete', 0, 'has delete the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('REQ4', 'Documentation', 0, 'has add a device documentation', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQS1', 'Registered', 1, 'has change the request status to REGISTERED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQS2', 'Uji Fungsi', 2, 'has change the request status to UJI FUNGSI', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQS3A', 'Uji QA', 3, 'has change the request status to UJI QA', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQS3B', 'Calibrating', 3, 'has change the request status to CALIBRATING', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQS4', 'Submitted', 4, 'has change the request status to SUBMITTED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
-('REQS5', 'Finished', 5, 'has change the request status to FINISHED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQCAL1', 'Registered', 1, 'has change the request status to REGISTERED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQCAL2', 'Function Test', 2, 'has change the request status to FUNCTION TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQCAL3', 'Calibrating', 3, 'has change the request status to CALIBRATING', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQCAL4', 'Submitted', 4, 'has change the request status to SUBMITTED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQCAL5', 'Finished', 5, 'has change the request status to FINISHED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQQA1', 'Registered', 1, 'has change the request status to REGISTERED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQQA2', 'Function Test', 2, 'has change the request status to FUNCTION TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQQA3', 'QA Test', 3, 'has change the request status to QA TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQQA4', 'Submitted', 4, 'has change the request status to SUBMITTED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQQA5', 'Finished', 5, 'has change the request status to FINISHED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQTA1', 'Registered', 1, 'has change the request status to REGISTERED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQTA2', 'Function Test', 2, 'has change the request status to FUNCTION TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQTA3', 'TA Test', 3, 'has change the request status to TA TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQTA4', 'Submitted', 4, 'has change the request status to SUBMITTED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQTA5', 'Finished', 5, 'has change the request status to FINISHED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQVT1', 'Registered', 1, 'has change the request status to REGISTERED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQVT2', 'Function Test', 2, 'has change the request status to FUNCTION TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQVT3', 'VT Test', 3, 'has change the request status to VT TEST', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQVT4', 'Submitted', 4, 'has change the request status to SUBMITTED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
+('REQVT5', 'Finished', 5, 'has change the request status to FINISHED', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('RES1', 'Add', 0, 'has add the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('RES2', 'Edit', 0, 'has edit the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
 ('RES3', 'Delete', 0, 'has delete the record', '2020-04-19T15:40:53.729Z', '2020-04-19T15:40:53.729Z'),
@@ -510,7 +524,9 @@ CREATE TABLE `history` (
 
 INSERT INTO `history` (`id`, `reference_id`, `test_engineer_id`, `cal_step_id`, `message`, `created`) VALUES
 ('H1E69KFPCO', '012/CAB', '970037', 'DEV2', '', '2020-04-19T16:31:34.808Z'),
-('H1E69KJEJN', '012/CAB', '970037', 'DEV2', '', '2020-04-19T16:33:34.839Z');
+('H1E69KJEJN', '022/132/QA/2020', '970037', 'REQ1', '', '2020-04-19T16:33:34.839Z'),
+('H1E6H6EF3G', '022/132/QA/2020', '970037', 'REQQA2', 'prfkt', '2020-04-22T15:00:06.896Z'),
+('H1E6H7G8FK', '022/132/QA/2020', '970037', 'REQQA3', 'proceed', '2020-04-22T15:18:34.228Z');
 
 -- --------------------------------------------------------
 

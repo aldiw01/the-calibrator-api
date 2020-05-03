@@ -20,6 +20,10 @@ router.get('/:id', (req, res) => {
   db.getCalStep(req.params, res)
 })
 
+router.get('/reference/:id', (req, res) => {
+  db.getCalStepReference(req.params, res)
+})
+
 router.post('/', jwtMW, (req, res) => {
   db.newCalStep(req.body, res)
 })

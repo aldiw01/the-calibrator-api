@@ -65,6 +65,34 @@ module.exports = {
     });
     c.end();
   },
+  getCalStepReference: function (req, res) {
+    const request = ["%" + req.id + "%"]
+    c.query("SELECT * FROM `cal_steps` WHERE id LIKE ?", request, { metadata: true, useArray: true }, function (err, rows) {
+      if (err) {
+        res.status(500).send({ message: "Error 500: Internal Server Error" });
+        console.log(err);
+        return
+      }
+
+      var data = [];
+      rows.forEach(function (items) {
+        data.push({
+          id: items[0],
+          step_name: items[1],
+          step_number: items[2],
+          info: items[3],
+          created: items[4],
+          updated: items[5]
+        });
+      });
+      if (data.length < 1) {
+        res.status(404).send({ message: 'Data not found.' });
+      } else {
+        res.json(data);
+      }
+    });
+    c.end();
+  },
   newCalStep: function (req, res) {
     const waktu = new Date().toISOString();
     var request = [req.id, req.step_name, req.step_number, req.info, waktu, waktu];
